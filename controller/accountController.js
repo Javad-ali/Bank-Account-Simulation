@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const BackAccount = require("../models/accountModel");
+const BankAccount = require("../models/accountModel");
 
 exports.openAccount = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ exports.openAccount = async (req, res) => {
       panNo,
     } = req.body;
 
-    const account = new BackAccount({
+    const account = new BankAccount({
       name,
       gender,
       dob,
@@ -43,7 +43,7 @@ exports.updateKyc = async (req, res) => {
     const { id } = req.params;
     const { name, dob, email, mobile, adharNo, panNo } = req.body;
 
-    const account = await BackAccount.findById(id);
+    const account = await BankAccount.findById(id);
 
     if (!account) {
       return res.status(404).json({ message: "Account not found" });
@@ -73,14 +73,14 @@ exports.depositMoney = async (req, res) => {
   const { amount } = req.body;
   try {
 
-const user= await BackAccount.findOne({_id:req.params.accountId})
+const user= await BankAccount.findOne({_id:req.params.accountId})
 
 if(!user) return res.status(404).send("Account not found")
 
 if(user.closed == true) return res.status(406).send("Payment not acceptable")
 
 
-    const account = await BackAccount.findByIdAndUpdate(
+    const account = await BankAccount.findByIdAndUpdate(
       req.params.accountId,
       {
         $inc: { balance: amount },
@@ -102,13 +102,13 @@ exports.withdrawMoney = async (req, res) => {
   const { amount } = req.body;
 
   try {
-    const user= await BackAccount.findOne({_id:req.params.accountId})
+    const user= await BankAccount.findOne({_id:req.params.accountId})
 
     if(!user) return res.status(404).send("Account not found")
     if(user.closed == true) return res.status(406).send("Account closed")
 
 
-    const account = await BackAccount.findByIdAndUpdate(
+    const account = await BankAccount.findByIdAndUpdate(
       req.params.accountId,
       {
         $inc: { balance: -amount },
@@ -130,8 +130,8 @@ exports.transferMoney = async (req, res) => {
   const { fromAccountId, toAccountId } = req.params;
 
   try {
-    const fromAccount = await BackAccount.findById(fromAccountId);
-    const toAccount = await BackAccount.findById(toAccountId);
+    const fromAccount = await BankAccount.findById(fromAccountId);
+    const toAccount = await BankAccount.findById(toAccountId);
 
     if (!fromAccount || !toAccount) {
       return res.status(404).send("Account not found");
@@ -145,7 +145,7 @@ exports.transferMoney = async (req, res) => {
       return res.status(400).send("Insufficient balance");
     }
 
-    await BackAccount.bulkWrite([
+    await BankAccount.bulkWrite([
       {
         updateOne: {
           filter: { _id: fromAccountId },
@@ -196,14 +196,14 @@ exports.receiveMoney = async (req, res) => {
   const { toAccountId } = req.params;
 
   try {
-    const toAccount = await BackAccount.findById(toAccountId);
+    const toAccount = await BankAccount.findById(toAccountId);
 
     if (!toAccount) {
       return res.status(404).send("Account not found");
     }
     if(toAccount.closed == true) return res.status(406).send("Account closed")
 
-    await BackAccount.updateOne(
+    await BankAccount.updateOne(
       { _id: toAccountId },
       {
         $inc: { balance: amount },
@@ -225,7 +225,7 @@ exports.printStatement = async (req, res) => {
   const { accountId } = req.params;
 
   try {
-    const account = await BackAccount.findById(accountId);
+    const account = await BankAccount.findById(accountId);
 
     if (!account) {
       return res.status(404).send("Account not found");
@@ -272,7 +272,7 @@ exports.closeAccount = async (req,res)=>{
     const { accountId } = req.params;
 
     try {
-      const account = await BackAccount.findById(accountId);
+      const account = await BankAccount.findById(accountId);
   
       if (!account) {
         return res.status(404).send('Account not found');

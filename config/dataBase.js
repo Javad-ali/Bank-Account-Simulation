@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const url = "mongodb://localhost:27017/backaccounts"
+const url = "mongodb://localhost:27017/bankaccounts"
 
 const dataBase = async ()=>{
     try {

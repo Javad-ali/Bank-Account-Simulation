@@ -32,33 +32,9 @@ ledger:[{
     from:{type:"String"},
     to:{type:"String"}
 }]
-//     ledger: [
-//         {
-//           type: String,
-//           amount: Number,
-//           date: Date
-//         }
-//       ],
-// name: String,
-// gender: String,
-// dob: String,
-// email: String,
-// mobile: String,
-// address: String,
-// balance: Number,
-// adharNo: String,
-// panNo: String,
-// status: String,
-// ledger: [
-//   {
-//     type: String,
-//     amount: Number,
-//     date: Date
-//   }
-// ]
 
   });
   
- const BackAccount = mongoose.model('BackAccount', accountSchema);
+ const BankAccount = mongoose.model('BankAccount', accountSchema);
 
-module.exports = BackAccount  
+module.exports = BankAccount  
